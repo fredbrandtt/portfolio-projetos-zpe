@@ -1,0 +1,913 @@
+<!-- ==========================================================================
+     ZPE MARANHÃO · Ato de Formalização dos Investimentos
+     Deck institucional 16:9 · Portfólio de Projetos Industriais
+     Design System ZPE Maranhão v1.0 (Barlow / Inter / JetBrains Mono ·
+     azul institucional dominante · verde acento cirúrgico · gradients de
+     profundidade + grão · seta e world dotted como motivos de marca).
+     Arquivo autocontido (CSS/JS inline). Assets de marca em ./assets/brand.
+     ========================================================================== -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZPE Maranhão · Ato de Formalização dos Investimentos</title>
+
+<!-- === WEBFONTS (design system: Barlow display · Inter body · JetBrains Mono meta) === -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   1. FIXED 16:9 STAGE — MANDATORY BASE (viewport-base.css, incluído na íntegra)
+   ========================================================================== */
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--stage-bg, #05060a); }
+.deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--stage-bg, #05060a); }
+.deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; background: var(--slide-bg, #fff); }
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: block; visibility: hidden; opacity: 0; pointer-events: none; background: var(--slide-bg, #fff); }
+.slide.active, .slide.visible { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+img, video, canvas, svg { max-width: 100%; max-height: 100%; }
+.deck-controls { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1000; }
+@media print {
+  html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+  .deck-viewport { position: static; overflow: visible; background: #fff; }
+  .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+  .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .deck-controls { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; animation-iteration-count: 1 !important; }
+}
+
+/* ==========================================================================
+   2. TOKENS DO DESIGN SYSTEM ZPE MARANHÃO
+   ========================================================================== */
+:root {
+  /* Azul institucional — estrutura, autoridade (~70%) */
+  --blue: #244582;
+  --blue-deep: #1a3160;
+  --blue-darkest: #0f1d3a;
+  --blue-pressed: #142849;
+  --blue-soft: #dbe4f5;
+  --blue-pale: #eef2fb;
+
+  /* Verde de ação — acento cirúrgico (~10%) */
+  --green: #4cac4b;
+  --green-deep: #3d9a3c;
+  --green-pressed: #2f7a2e;
+  --green-soft: #5fb55e;
+  --green-pale: #e4f4e3;
+
+  /* Canvas claro (~20%) */
+  --canvas: #ffffff;
+  --canvas-soft: #f9f9ff;
+  --canvas-blue: #f0f3ff;
+
+  /* Texto */
+  --ink: #1a2942;
+  --ink-soft: #4a5a78;
+  --ink-mute: #7a87a0;
+
+  /* Bordas */
+  --line: #e6eaf2;
+  --line-soft: #eef1f7;
+  --line-strong: #cdd5e4;
+
+  /* Gradients de profundidade */
+  --grad-abyss: linear-gradient(180deg, #0f1d3a 0%, #244582 100%);
+  --grad-ocean-floor: linear-gradient(160deg, #0a1428 0%, #1a3160 45%, #2a5094 100%);
+  --grad-deep-horizon: linear-gradient(180deg, #0f1d3a 0%, #1a3160 40%, #244582 70%, #3a6ab5 100%);
+  --grad-night-glow: radial-gradient(ellipse 50% 50% at 70% 20%, rgba(42,80,148,0.6) 0%, transparent 70%), linear-gradient(180deg, #0f1d3a 0%, #142849 100%);
+  --grad-aurora-deep: linear-gradient(180deg, #0f1d3a 0%, #18305a 52%, #244582 100%);
+  --grad-aurora-blue: linear-gradient(160deg, #1a3160 0%, #244582 40%, #1a3160 72%, #0f1d3a 100%);
+  --grad-frost: linear-gradient(180deg, #ffffff 0%, #f0f3ff 50%, #eef2fb 100%);
+  --grad-mist: linear-gradient(180deg, #f0f3ff 0%, #ffffff 100%);
+  --grad-accent-line: linear-gradient(90deg, #4cac4b 0%, #3d9a3c 100%);
+
+  /* Sombras — sempre com tint azulado */
+  --shadow-sm: 0 1px 3px rgba(26,41,66,.06), 0 1px 2px rgba(26,41,66,.04);
+  --shadow-md: 0 8px 24px -10px rgba(26,41,66,.16);
+  --shadow-lg: 0 24px 56px -18px rgba(26,41,66,.24);
+
+  /* Grão (overlay de ruído SVG) */
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  --grain-dark: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+
+  /* Fontes */
+  --font-display: 'Barlow', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Motion */
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  --stage-bg: #05060a;
+}
+
+/* ==========================================================================
+   3. TEXTURA DE GRÃO — utilitário reutilizável
+   ========================================================================== */
+.grain-dark::after { content: ""; position: absolute; inset: 0; background: var(--grain-dark) repeat; mix-blend-mode: overlay; pointer-events: none; z-index: 2; }
+.grain-light::after { content: ""; position: absolute; inset: 0; background: var(--grain) repeat; mix-blend-mode: multiply; pointer-events: none; z-index: 2; }
+
+/* ==========================================================================
+   4. ELEMENTOS DE MARCA (seta, world, malha de conexões)
+   ========================================================================== */
+.brand-arrow { position: absolute; pointer-events: none; z-index: 1; }
+.world-dotted { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; z-index: 1; }
+.world-dotted.invert { filter: brightness(0) invert(1); }
+
+/* rede de conexões (canvas) só em blocos azuis escuros */
+.mesh { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+/* ==========================================================================
+   5. TIPOGRAFIA E COMPONENTES COMUNS
+   ========================================================================== */
+.eyebrow {
+  font-family: var(--font-mono); font-weight: 500; font-size: 20px;
+  letter-spacing: .16em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex: none; }
+.eyebrow .rule { width: 46px; height: 2px; background: var(--grad-accent-line); border-radius: 2px; }
+
+.accent-bar { width: 64px; height: 4px; background: var(--grad-accent-line); border-radius: 3px; }
+
+/* pílula de status */
+.pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 18px;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 11px 20px; border-radius: 9999px;
+}
+.pill .led { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.pill.approved { color: var(--green-deep); background: var(--green-pale); border: 1px solid rgba(76,172,75,.3); }
+.pill.approved .led { background: var(--green); box-shadow: 0 0 0 4px rgba(76,172,75,.18); }
+.pill.review { color: #6b4a08; background: #fbf2dc; border: 1px solid rgba(224,160,32,.35); }
+.pill.review .led { background: #e0a020; box-shadow: 0 0 0 4px rgba(224,160,32,.16); }
+.pill.dark { color: var(--green-soft); background: rgba(76,172,75,.12); border: 1px solid rgba(76,172,75,.32); }
+.pill.dark .led { background: var(--green-soft); box-shadow: 0 0 0 4px rgba(76,172,75,.16); }
+
+/* ==========================================================================
+   6. CAPA
+   ========================================================================== */
+.s-cover { background: var(--grad-aurora-deep); color: #fff; font-family: var(--font-body); }
+.s-cover .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 55% at 78% 8%, rgba(74,120,200,.55) 0%, transparent 62%); z-index: 1; }
+.s-cover .arrow-hero { right: -120px; top: 50%; transform: translateY(-50%); width: 760px; opacity: .16; }
+.s-cover .world-dotted { opacity: .11; }
+.s-cover .cover-inner { position: absolute; z-index: 3; left: 150px; top: 268px; max-width: 1220px; }
+.s-cover .kicker {
+  font-family: var(--font-mono); font-weight: 500; font-size: 22px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--green-soft);
+  display: inline-flex; align-items: center; gap: 16px;
+}
+.s-cover .kicker .rule { width: 54px; height: 2px; background: var(--green-soft); opacity: .8; }
+.s-cover h1 {
+  font-family: var(--font-display); font-weight: 300; font-size: 112px; line-height: .98;
+  letter-spacing: -.03em; margin: 34px 0 0;
+}
+.s-cover h1 b { font-weight: 600; }
+.s-cover h1 .em { color: #fff; }
+.s-cover .lede { font-size: 30px; color: rgba(255,255,255,.72); max-width: 44ch; margin-top: 34px; line-height: 1.5; font-weight: 400; }
+.s-cover .cover-meta {
+  position: absolute; z-index: 3; left: 150px; bottom: 168px;
+  display: flex; gap: 64px; align-items: flex-start;
+}
+.s-cover .cover-meta .mi .l { font-family: var(--font-mono); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.42); }
+.s-cover .cover-meta .mi .v { font-family: var(--font-display); font-weight: 500; font-size: 25px; margin-top: 8px; letter-spacing: -.01em; }
+.s-cover .cover-meta .mi .v span { color: var(--green-soft); }
+
+/* rodapé compartilhado (fundos escuros) */
+.footer-dark { position: absolute; z-index: 4; bottom: 64px; left: 150px; right: 150px; display: flex; justify-content: space-between; align-items: center; }
+.footer-dark .logo-img { height: 44px; opacity: .95; }
+.footer-dark .pg { font-family: var(--font-mono); font-size: 18px; letter-spacing: .1em; color: rgba(255,255,255,.5); }
+
+/* rodapé claro */
+.footer-light { position: absolute; z-index: 4; bottom: 60px; left: 128px; right: 128px; display: flex; justify-content: space-between; align-items: center; }
+.footer-light .logo-img { height: 38px; }
+.footer-light .pg { font-family: var(--font-mono); font-size: 18px; letter-spacing: .1em; color: var(--ink-mute); }
+
+/* ==========================================================================
+   7. SLIDE DE VISÃO GERAL (portfólio consolidado)
+   ========================================================================== */
+.s-overview { background: var(--grad-aurora-blue); color: #fff; font-family: var(--font-body); }
+.s-overview .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 60% at 15% 12%, rgba(74,120,200,.42) 0%, transparent 60%); z-index: 1; }
+.s-overview .world-dotted { opacity: .07; }
+.ov-head { position: absolute; z-index: 3; left: 128px; top: 118px; }
+.ov-head .eyebrow { color: var(--green-soft); }
+.ov-head h2 { font-family: var(--font-display); font-weight: 300; font-size: 74px; line-height: 1.02; letter-spacing: -.025em; margin: 26px 0 0; max-width: 22ch; }
+.ov-head h2 b { font-weight: 600; }
+.ov-grid { position: absolute; z-index: 3; left: 128px; right: 128px; top: 430px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.ov-stat {
+  position: relative; overflow: hidden; border-radius: 22px; padding: 40px 36px 44px;
+  background: linear-gradient(180deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.03) 100%);
+  border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px);
+}
+.ov-stat .l { font-family: var(--font-mono); font-size: 18px; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.62); }
+.ov-stat .n { font-family: var(--font-display); font-weight: 600; font-size: 82px; letter-spacing: -.03em; line-height: .92; margin-top: 22px; font-variant-numeric: tabular-nums; }
+.ov-stat .n u { font-style: normal; font-size: .34em; color: var(--green-soft); margin-left: 8px; font-weight: 500; }
+.ov-stat .sub { font-size: 20px; color: rgba(255,255,255,.58); margin-top: 14px; line-height: 1.4; }
+.ov-stat .topline { position: absolute; top: 0; left: 0; height: 4px; width: 100%; background: var(--grad-accent-line); opacity: .9; }
+.ov-companies { position: absolute; z-index: 3; left: 128px; right: 128px; top: 760px; display: flex; gap: 14px; align-items: center; }
+.ov-companies .lbl { font-family: var(--font-mono); font-size: 18px; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-right: 8px; }
+.ov-companies .chip { font-family: var(--font-display); font-weight: 500; font-size: 24px; letter-spacing: .01em; padding: 13px 26px; border: 1px solid rgba(255,255,255,.16); border-radius: 9999px; color: #fff; }
+.ov-companies .chip b { color: var(--green-soft); font-weight: 600; }
+
+/* ==========================================================================
+   8. LAUDA DO PROJETO — layout mestre (uma por projeto)
+   ========================================================================== */
+.s-project { background: var(--canvas); color: var(--ink); font-family: var(--font-body); display: grid; grid-template-columns: 760px 1fr; }
+
+/* --- painel esquerdo: âncora azul profunda com identidade do projeto --- */
+.pj-left { position: relative; overflow: hidden; padding: 118px 76px 0; color: #fff; }
+.pj-left .aurora { position: absolute; inset: 0; z-index: 1; }
+.pj-left .arrow-bg { left: -180px; bottom: -140px; width: 560px; opacity: .12; }
+.pj-left .inner { position: relative; z-index: 3; height: 100%; display: flex; flex-direction: column; }
+.pj-index {
+  font-family: var(--font-mono); font-weight: 500; font-size: 19px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); display: flex; align-items: center; gap: 16px;
+}
+.pj-index .big { font-family: var(--font-display); font-weight: 300; font-size: 32px; color: var(--green-soft); letter-spacing: 0; }
+.pj-company { font-family: var(--font-display); font-weight: 600; font-size: 84px; line-height: .96; letter-spacing: -.03em; margin: 30px 0 0; }
+.pj-tagline { font-family: var(--font-display); font-weight: 300; font-size: 36px; line-height: 1.22; letter-spacing: -.01em; color: rgba(255,255,255,.85); margin-top: 22px; max-width: 20ch; }
+.pj-tagline b { font-weight: 600; }
+.pj-about-label { font-family: var(--font-mono); font-size: 18px; letter-spacing: .1em; text-transform: uppercase; color: var(--green-soft); margin-top: 40px; display: flex; align-items: center; gap: 12px; }
+.pj-about-label .rule { width: 34px; height: 2px; background: var(--green-soft); opacity: .7; }
+.pj-about { font-size: 24px; line-height: 1.58; color: rgba(255,255,255,.78); margin-top: 18px; max-width: 32ch; }
+.pj-products { margin-top: auto; margin-bottom: 88px; }
+.pj-products .l { font-family: var(--font-mono); font-size: 17px; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.pj-products .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.pj-products .tag { font-size: 19px; font-weight: 500; padding: 10px 18px; border-radius: 9999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: rgba(255,255,255,.92); }
+
+/* --- painel direito: dados-chave em canvas claro --- */
+.pj-right { position: relative; padding: 108px 92px 0; display: flex; flex-direction: column; }
+.pj-right .rtop { display: flex; justify-content: space-between; align-items: flex-start; }
+.pj-right .rtop .eyebrow { color: var(--green-deep); }
+
+/* trilho de métricas: investimento + área lado a lado (stat cards escuros) */
+.pj-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+.stat-card { position: relative; overflow: hidden; background: var(--grad-abyss); border-radius: 20px; padding: 34px 34px 38px; color: #fff; }
+.stat-card .l { font-family: var(--font-mono); font-size: 18px; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.62); position: relative; z-index: 3; }
+.stat-card .n { font-family: var(--font-display); font-weight: 600; font-size: 64px; letter-spacing: -.03em; line-height: 1; margin-top: 14px; font-variant-numeric: tabular-nums; position: relative; z-index: 3; }
+.stat-card .n u { font-style: normal; font-size: .36em; color: var(--green-soft); margin-left: 8px; font-weight: 500; }
+.stat-card .foot { font-size: 19px; color: rgba(255,255,255,.58); margin-top: 12px; position: relative; z-index: 3; }
+.stat-card .topline { position: absolute; top: 0; left: 0; height: 4px; width: 100%; background: var(--grad-accent-line); z-index: 3; }
+
+/* empregos — bloco claro com barras diretos/indiretos */
+.pj-jobs { margin-top: 30px; background: var(--canvas-soft); border: 1px solid var(--line); border-radius: 20px; padding: 32px 36px; box-shadow: var(--shadow-sm); }
+.pj-jobs .jhead { display: flex; justify-content: space-between; align-items: baseline; }
+.pj-jobs .jhead .l { font-family: var(--font-mono); font-size: 18px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-soft); }
+.pj-jobs .jhead .total { font-family: var(--font-display); font-weight: 600; font-size: 42px; color: var(--blue); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pj-jobs .jhead .total u { font-style: normal; font-size: .44em; color: var(--green-deep); text-transform: uppercase; letter-spacing: .06em; margin-left: 8px; font-family: var(--font-mono); }
+.pj-jobs .bar-track { margin-top: 22px; height: 18px; border-radius: 9999px; background: var(--line); overflow: hidden; display: flex; }
+.pj-jobs .bar-track .seg-d { background: var(--grad-abyss); height: 100%; }
+.pj-jobs .bar-track .seg-i { background: var(--grad-accent-line); height: 100%; }
+.pj-jobs .legend { display: flex; gap: 36px; margin-top: 20px; }
+.pj-jobs .legend .li { display: flex; align-items: center; gap: 12px; font-size: 21px; color: var(--ink-soft); }
+.pj-jobs .legend .li .sw { width: 16px; height: 16px; border-radius: 4px; flex: none; }
+.pj-jobs .legend .li b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.pj-jobs .legend .li .sw.d { background: var(--blue-deep); }
+.pj-jobs .legend .li .sw.i { background: var(--green); }
+.pj-jobs .jnote { font-size: 18px; color: var(--ink-soft); margin-top: 18px; }
+
+/* faixa dupla: prazo/situação + impacto econômico */
+.pj-strip { margin-top: 30px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 24px; }
+.pj-box { border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px; background: var(--canvas); box-shadow: var(--shadow-sm); position: relative; }
+.pj-box .l { font-family: var(--font-mono); font-size: 17px; letter-spacing: .08em; text-transform: uppercase; color: var(--green-deep); display: flex; align-items: center; gap: 10px; }
+.pj-box .l .rule { width: 24px; height: 2px; background: var(--grad-accent-line); border-radius: 2px; }
+.pj-box.phase .phv { font-family: var(--font-display); font-weight: 500; font-size: 25px; color: var(--ink); margin-top: 16px; line-height: 1.3; }
+.pj-box.phase .pill { margin-top: 16px; }
+.pj-box.impact .iv { font-size: 21px; line-height: 1.5; color: var(--ink-soft); margin-top: 14px; }
+.pj-box.impact .iv b { color: var(--blue); font-weight: 600; }
+
+/* ==========================================================================
+   9. SLIDE DE IMPACTO CONSOLIDADO / ENCERRAMENTO
+   ========================================================================== */
+.s-impact { background: var(--grad-ocean-floor); color: #fff; font-family: var(--font-body); }
+.s-impact .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 55% at 82% 85%, rgba(47,122,46,.28) 0%, transparent 60%); z-index: 1; }
+.s-impact .arrow-bg { right: -160px; top: -160px; width: 620px; opacity: .1; transform: rotate(180deg); }
+.s-impact .world-dotted { opacity: .08; }
+.im-head { position: absolute; z-index: 3; left: 128px; top: 120px; max-width: 1100px; }
+.im-head .eyebrow { color: var(--green-soft); }
+.im-head h2 { font-family: var(--font-display); font-weight: 300; font-size: 72px; line-height: 1.03; letter-spacing: -.025em; margin: 26px 0 0; }
+.im-head h2 b { font-weight: 600; }
+.im-body { position: absolute; z-index: 3; left: 128px; top: 348px; right: 700px; }
+.im-body p { font-size: 27px; line-height: 1.6; color: rgba(255,255,255,.78); }
+.im-body p b { color: #fff; font-weight: 600; }
+.im-chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; max-width: 46ch; }
+.im-chips .c { font-family: var(--font-mono); font-size: 18px; letter-spacing: .03em; padding: 12px 20px; border-radius: 9999px; border: 1px solid rgba(255,255,255,.16); color: rgba(255,255,255,.86); }
+.im-chips .c b { color: var(--green-soft); font-weight: 600; }
+.im-totals { position: absolute; z-index: 3; right: 128px; top: 300px; width: 508px; display: flex; flex-direction: column; gap: 20px; }
+.im-total {
+  position: relative; overflow: hidden; border-radius: 20px; padding: 30px 34px;
+  background: linear-gradient(180deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.03) 100%);
+  border: 1px solid rgba(255,255,255,.14); display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+}
+.im-total .l { font-family: var(--font-mono); font-size: 18px; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.68); max-width: 12ch; line-height: 1.35; }
+.im-total .n { font-family: var(--font-display); font-weight: 600; font-size: 58px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; text-align: right; }
+.im-total .n u { font-style: normal; font-size: .34em; color: var(--green-soft); margin-left: 6px; font-weight: 500; }
+.im-total.hero { background: linear-gradient(160deg, rgba(76,172,75,.22) 0%, rgba(47,122,46,.08) 100%); border-color: rgba(76,172,75,.4); }
+
+/* ==========================================================================
+   10. ANIMAÇÕES DE ENTRADA (reveal por slide ativo) — easing do DS
+   ========================================================================== */
+.reveal { opacity: 0; transform: translateY(22px); }
+.slide.active .reveal {
+  animation: revealUp .72s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
+
+/* zoom sutil da seta / world na capa */
+.slide.active .drift { animation: drift 1.4s var(--ease-out) forwards; }
+@keyframes drift { from { opacity: 0; transform: translateY(-50%) scale(1.06); } }
+
+/* linha de destaque que "cresce" */
+.grow { transform-origin: left center; }
+.slide.active .grow { animation: growX .8s var(--ease) forwards; animation-delay: var(--d, .2s); transform: scaleX(0); }
+@keyframes growX { to { transform: scaleX(1); } }
+
+/* preenchimento das barras de emprego */
+.slide.active .bar-fill { animation: fillBar 1s var(--ease-out) forwards; animation-delay: .45s; }
+@keyframes fillBar { from { width: 0 !important; } }
+
+/* contador — o número sobe levemente ao revelar */
+.slide.active .count { animation: countPop .8s var(--ease-out) forwards; animation-delay: var(--d, .3s); opacity: 0; transform: translateY(14px); }
+@keyframes countPop { to { opacity: 1; transform: translateY(0); } }
+
+/* ==========================================================================
+   11. TRANSIÇÃO ENTRE SLIDES (fade + leve deslocamento cinematográfico)
+   ========================================================================== */
+.slide { transition: opacity .62s var(--ease), transform .62s var(--ease); transform: translateY(0); }
+.slide:not(.active) { transform: translateY(18px); }
+
+/* ==========================================================================
+   12. CHROME DE NAVEGAÇÃO
+   ========================================================================== */
+.deck-controls { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9999px; background: rgba(10,20,40,.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.14); }
+.deck-controls button { width: 44px; height: 44px; border: none; border-radius: 9999px; background: rgba(255,255,255,.08); color: #fff; font-size: 19px; cursor: pointer; display: grid; place-items: center; transition: background .2s var(--ease); font-family: var(--font-body); }
+.deck-controls button:hover { background: var(--green); }
+.deck-controls .counter { font-family: var(--font-mono); font-size: 16px; color: rgba(255,255,255,.8); padding: 0 12px; letter-spacing: .06em; min-width: 68px; text-align: center; }
+.deck-controls .divider { width: 1px; height: 26px; background: rgba(255,255,255,.16); margin: 0 2px; }
+.deck-controls .fs-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+/* barra de progresso topo */
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--grad-accent-line); z-index: 1200; width: 0; transition: width .5s var(--ease); }
+
+/* dica de navegação */
+.nav-hint { position: fixed; bottom: 30px; right: 30px; z-index: 1000; font-family: var(--font-mono); font-size: 15px; letter-spacing: .05em; color: rgba(255,255,255,.5); text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck-viewport" id="viewport">
+  <div class="deck-stage" id="stage">
+
+    <!-- ====================================================================
+         SLIDE 1 · CAPA
+         ==================================================================== -->
+    <section class="slide s-cover active grain-dark" data-theme="dark">
+      <div class="aurora"></div>
+      <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
+      <img class="brand-arrow arrow-hero drift" src="assets/brand/seta_outline.svg" alt="">
+
+      <div class="cover-inner">
+        <div class="kicker reveal" style="--d:.1s"><span class="rule"></span>Ato de Formalização dos Investimentos</div>
+        <h1 class="reveal" style="--d:.24s">Portfólio de projetos<br><b>industriais</b> da <span class="em">ZPE Maranhão</span></h1>
+        <p class="lede reveal" style="--d:.5s">Quatro empreendimentos âncora que transformam Bacabeira em polo industrial de exportação: energia limpa, siderurgia verde e biocombustíveis.</p>
+      </div>
+
+      <div class="footer-dark reveal" style="--d:.8s">
+        <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
+        <span class="pg">01 / 07</span>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 2 · VISÃO GERAL DO PORTFÓLIO
+         ==================================================================== -->
+    <section class="slide s-overview grain-dark" data-theme="dark">
+      <div class="aurora"></div>
+      <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
+
+      <div class="ov-head">
+        <div class="eyebrow reveal" style="--d:.05s"><span class="dot"></span>Portfólio consolidado</div>
+        <h2 class="reveal" style="--d:.16s">Um portfólio de <b>R$ 28,82 bilhões</b> em capital privado</h2>
+      </div>
+
+      <div class="ov-grid">
+        <div class="ov-stat reveal" style="--d:.34s"><span class="topline grow" style="--d:.5s"></span>
+          <div class="l">Investimento total</div>
+          <div class="n count" style="--d:.5s">28,82<u>R$ bi</u></div>
+          <div class="sub">CAPEX privado somado dos quatro projetos</div>
+        </div>
+        <div class="ov-stat reveal" style="--d:.46s"><span class="topline grow" style="--d:.6s"></span>
+          <div class="l">Empregos previstos</div>
+          <div class="n count" style="--d:.6s">29,9<u>mil</u></div>
+          <div class="sub">12.634 diretos e 17.259 indiretos</div>
+        </div>
+        <div class="ov-stat reveal" style="--d:.58s"><span class="topline grow" style="--d:.7s"></span>
+          <div class="l">Área industrial</div>
+          <div class="n count" style="--d:.7s">804<u>ha</u></div>
+          <div class="sub">8,04 milhões de m² destinados</div>
+        </div>
+        <div class="ov-stat reveal" style="--d:.7s"><span class="topline grow" style="--d:.8s"></span>
+          <div class="l">Projetos âncora</div>
+          <div class="n count" style="--d:.8s">04</div>
+          <div class="sub">Siderurgia, refino, biotech e H₂ verde</div>
+        </div>
+      </div>
+
+      <div class="ov-companies reveal" style="--d:.9s">
+        <span class="lbl">Empresas signatárias</span>
+        <span class="chip"><b>01</b> · Hydeas</span>
+        <span class="chip"><b>02</b> · Oil Group</span>
+        <span class="chip"><b>03</b> · 4Wood Biotech</span>
+        <span class="chip"><b>04</b> · H2X</span>
+      </div>
+
+      <div class="footer-dark reveal" style="--d:1s">
+        <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
+        <span class="pg">02 / 07</span>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 3 · LAUDA — PROJETO 01 · HYDEAS
+         ==================================================================== -->
+    <section class="slide s-project" data-theme="light">
+      <!-- painel esquerdo (âncora azul) -->
+      <div class="pj-left grain-dark" style="--slide-bg:transparent">
+        <div class="aurora" style="background:var(--grad-aurora-deep)"></div>
+        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
+        <div class="inner">
+          <div class="pj-index reveal" style="--d:.05s"><span class="big">01</span> / 04 · Siderurgia verde</div>
+          <div class="pj-company reveal" style="--d:.16s">Hydeas</div>
+          <div class="pj-tagline reveal" style="--d:.26s">Complexo integrado de <b>ferro-esponja verde</b> (HBI)</div>
+          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
+          <p class="pj-about reveal" style="--d:.44s">Complexo industrial integrado para produção de ferro-esponja briquetado a quente (HBI, Hot Briquetted Iron), insumo estratégico para a siderurgia de baixo carbono voltado à exportação.</p>
+          <div class="pj-products reveal" style="--d:.56s">
+            <div class="l">Produtos & serviços</div>
+            <div class="tags"><span class="tag">HBI · Ferro-esponja briquetado a quente</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- painel direito (dados-chave) -->
+      <div class="pj-right">
+        <div class="rtop">
+          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
+        </div>
+
+        <div class="pj-metrics">
+          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
+            <div class="l">Investimento previsto</div>
+            <div class="n count" style="--d:.4s">18,46<u>R$ bi</u></div>
+            <div class="foot">Maior CAPEX do portfólio</div>
+          </div>
+          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
+            <div class="l">Área destinada</div>
+            <div class="n count" style="--d:.5s">460<u>ha</u></div>
+            <div class="foot">4.600.000 m²</div>
+          </div>
+        </div>
+
+        <div class="pj-jobs reveal" style="--d:.4s">
+          <div class="jhead">
+            <div class="l">Empregos gerados · implantação</div>
+            <div class="total">18.233 <u>total</u></div>
+          </div>
+          <div class="bar-track">
+            <div class="seg-d bar-fill" style="width:40%"></div>
+            <div class="seg-i bar-fill" style="width:60%"></div>
+          </div>
+          <div class="legend">
+            <div class="li"><span class="sw d"></span>Diretos <b>7.284</b></div>
+            <div class="li"><span class="sw i"></span>Indiretos <b>10.949</b></div>
+          </div>
+          <div class="jnote">Na operação: 4.710 empregos (300 diretos · 4.410 indiretos).</div>
+        </div>
+
+        <div class="pj-strip">
+          <div class="pj-box phase reveal" style="--d:.5s">
+            <div class="l"><span class="rule"></span>Prazo & situação</div>
+            <div class="phv">Fase de implantação</div>
+            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
+          </div>
+          <div class="pj-box impact reveal" style="--d:.58s">
+            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
+            <div class="iv">Ancoragem de uma <b>cadeia siderúrgica de baixo carbono</b> voltada à exportação, adensando fornecedores e agregando valor ao minério regional.</div>
+          </div>
+        </div>
+
+        <div class="footer-light reveal" style="--d:.7s">
+          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
+          <span class="pg">03 / 07</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 4 · LAUDA — PROJETO 02 · OIL GROUP
+         ==================================================================== -->
+    <section class="slide s-project" data-theme="light">
+      <div class="pj-left grain-dark" style="--slide-bg:transparent">
+        <div class="aurora" style="background:var(--grad-aurora-blue)"></div>
+        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
+        <div class="inner">
+          <div class="pj-index reveal" style="--d:.05s"><span class="big">02</span> / 04 · Refino & combustíveis</div>
+          <div class="pj-company reveal" style="--d:.16s">Oil Group</div>
+          <div class="pj-tagline reveal" style="--d:.26s">Refinaria modular de derivados de petróleo e <b>SAF</b></div>
+          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
+          <p class="pj-about reveal" style="--d:.44s">Refinaria modular voltada à produção de combustível de aviação sustentável (SAF) e derivados de petróleo para os mercados marítimo e rodoviário, com foco em exportação.</p>
+          <div class="pj-products reveal" style="--d:.56s">
+            <div class="l">Produtos & serviços</div>
+            <div class="tags">
+              <span class="tag">QAV Renovável (SAF)</span>
+              <span class="tag">Diesel comum</span>
+              <span class="tag">Diesel marítimo (MGO)</span>
+              <span class="tag">Gasolina</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-right">
+        <div class="rtop">
+          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
+        </div>
+
+        <div class="pj-metrics">
+          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
+            <div class="l">Investimento previsto</div>
+            <div class="n count" style="--d:.4s">5,89<u>R$ bi</u></div>
+            <div class="foot">≈ US$ 1,14 bilhão</div>
+          </div>
+          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
+            <div class="l">Área destinada</div>
+            <div class="n count" style="--d:.5s">264<u>ha</u></div>
+            <div class="foot">2.640.000 m²</div>
+          </div>
+        </div>
+
+        <div class="pj-jobs reveal" style="--d:.4s">
+          <div class="jhead">
+            <div class="l">Empregos gerados · implantação</div>
+            <div class="total">2.000 <u>diretos</u></div>
+          </div>
+          <div class="bar-track">
+            <div class="seg-d bar-fill" style="width:100%"></div>
+          </div>
+          <div class="legend">
+            <div class="li"><span class="sw d"></span>Diretos <b>2.000</b></div>
+            <div class="li"><span class="sw i"></span>Indiretos <b>a informar</b></div>
+          </div>
+          <div class="jnote">Na operação: 300 empregos diretos.</div>
+        </div>
+
+        <div class="pj-strip">
+          <div class="pj-box phase reveal" style="--d:.5s">
+            <div class="l"><span class="rule"></span>Prazo & situação</div>
+            <div class="phv">Pronto para implantação</div>
+            <span class="pill approved"><span class="led"></span>Aprovado & autorizado · CZPE</span>
+          </div>
+          <div class="pj-box impact reveal" style="--d:.58s">
+            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
+            <div class="iv">Coloca o Estado na rota do <b>combustível de aviação sustentável</b>, com exportação de derivados e fortalecimento da matriz de energias limpas.</div>
+          </div>
+        </div>
+
+        <div class="footer-light reveal" style="--d:.7s">
+          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
+          <span class="pg">04 / 07</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 5 · LAUDA — PROJETO 03 · 4WOOD BIOTECH
+         ==================================================================== -->
+    <section class="slide s-project" data-theme="light">
+      <div class="pj-left grain-dark" style="--slide-bg:transparent">
+        <div class="aurora" style="background:var(--grad-aurora-deep)"></div>
+        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
+        <div class="inner">
+          <div class="pj-index reveal" style="--d:.05s"><span class="big">03</span> / 04 · Bioeconomia</div>
+          <div class="pj-company reveal" style="--d:.16s">4Wood<br>Biotech</div>
+          <div class="pj-tagline reveal" style="--d:.26s">Biorrefinaria de <b>etanol de 2ª geração</b></div>
+          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
+          <p class="pj-about reveal" style="--d:.44s">Biorrefinaria de etanol de segunda geração (E2G) que converte biomassa em combustível renovável e coprodutos químicos de alto valor para o mercado global.</p>
+          <div class="pj-products reveal" style="--d:.56s">
+            <div class="l">Produtos & serviços</div>
+            <div class="tags">
+              <span class="tag">Etanol (E2G)</span>
+              <span class="tag">Furfural</span>
+              <span class="tag">Ácido acético</span>
+              <span class="tag">Lignina de alta pureza</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-right">
+        <div class="rtop">
+          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
+        </div>
+
+        <div class="pj-metrics">
+          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
+            <div class="l">Investimento previsto</div>
+            <div class="n count" style="--d:.4s">2,43<u>R$ bi</u></div>
+            <div class="foot">≈ US$ 470 milhões</div>
+          </div>
+          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
+            <div class="l">Área destinada</div>
+            <div class="n count" style="--d:.5s">20<u>ha</u></div>
+            <div class="foot">200.000 m²</div>
+          </div>
+        </div>
+
+        <div class="pj-jobs reveal" style="--d:.4s">
+          <div class="jhead">
+            <div class="l">Empregos gerados · implantação</div>
+            <div class="total">2.000 <u>diretos</u></div>
+          </div>
+          <div class="bar-track">
+            <div class="seg-d bar-fill" style="width:100%"></div>
+          </div>
+          <div class="legend">
+            <div class="li"><span class="sw d"></span>Diretos <b>2.000</b></div>
+            <div class="li"><span class="sw i"></span>Indiretos <b>a informar</b></div>
+          </div>
+          <div class="jnote">Na operação: 150 empregos diretos.</div>
+        </div>
+
+        <div class="pj-strip">
+          <div class="pj-box phase reveal" style="--d:.5s">
+            <div class="l"><span class="rule"></span>Prazo & situação</div>
+            <div class="phv">Fase de implantação</div>
+            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
+          </div>
+          <div class="pj-box impact reveal" style="--d:.58s">
+            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
+            <div class="iv">Diversifica a indústria com <b>bioeconomia de alto valor</b>: etanol avançado e química verde a partir de biomassa, agregando valor à cadeia local.</div>
+          </div>
+        </div>
+
+        <div class="footer-light reveal" style="--d:.7s">
+          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
+          <span class="pg">05 / 07</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 6 · LAUDA — PROJETO 04 · H2X
+         ==================================================================== -->
+    <section class="slide s-project" data-theme="light">
+      <div class="pj-left grain-dark" style="--slide-bg:transparent">
+        <div class="aurora" style="background:var(--grad-aurora-blue)"></div>
+        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
+        <div class="inner">
+          <div class="pj-index reveal" style="--d:.05s"><span class="big">04</span> / 04 · Hidrogênio verde</div>
+          <div class="pj-company reveal" style="--d:.16s">H2X</div>
+          <div class="pj-tagline reveal" style="--d:.26s">Planta de <b>e-metanol</b> e <b>hidrogênio verde</b></div>
+          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
+          <p class="pj-about reveal" style="--d:.44s">Planta de produção de e-metanol e hidrogênio verde (H₂V), combustíveis sintéticos de baixo carbono para descarbonizar a indústria e o transporte marítimo internacional.</p>
+          <div class="pj-products reveal" style="--d:.56s">
+            <div class="l">Produtos & serviços</div>
+            <div class="tags">
+              <span class="tag">E-metanol (álcool metílico)</span>
+              <span class="tag">Hidrogênio verde (H₂V)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-right">
+        <div class="rtop">
+          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
+        </div>
+
+        <div class="pj-metrics">
+          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
+            <div class="l">Investimento previsto</div>
+            <div class="n count" style="--d:.4s">2,04<u>R$ bi</u></div>
+            <div class="foot">R$ 2,036 bilhões</div>
+          </div>
+          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
+            <div class="l">Área destinada</div>
+            <div class="n count" style="--d:.5s">60<u>ha</u></div>
+            <div class="foot">600.000 m²</div>
+          </div>
+        </div>
+
+        <div class="pj-jobs reveal" style="--d:.4s">
+          <div class="jhead">
+            <div class="l">Empregos gerados · implantação</div>
+            <div class="total">2.000 <u>total</u></div>
+          </div>
+          <div class="bar-track">
+            <div class="seg-d bar-fill" style="width:25%"></div>
+            <div class="seg-i bar-fill" style="width:75%"></div>
+          </div>
+          <div class="legend">
+            <div class="li"><span class="sw d"></span>Diretos <b>500</b></div>
+            <div class="li"><span class="sw i"></span>Indiretos <b>1.500</b></div>
+          </div>
+          <div class="jnote">Na operação: 500 empregos (100 diretos · 400 indiretos).</div>
+        </div>
+
+        <div class="pj-strip">
+          <div class="pj-box phase reveal" style="--d:.5s">
+            <div class="l"><span class="rule"></span>Prazo & situação</div>
+            <div class="phv">Fase de implantação</div>
+            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
+          </div>
+          <div class="pj-box impact reveal" style="--d:.58s">
+            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
+            <div class="iv">Posiciona o Estado no mercado global de <b>combustíveis sintéticos verdes</b>, atraindo tecnologia de ponta e exportação de energia limpa.</div>
+          </div>
+        </div>
+
+        <div class="footer-light reveal" style="--d:.7s">
+          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
+          <span class="pg">06 / 07</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 7 · IMPACTO CONSOLIDADO / ENCERRAMENTO
+         ==================================================================== -->
+    <section class="slide s-impact grain-dark" data-theme="dark">
+      <div class="aurora"></div>
+      <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
+      <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
+
+      <div class="im-head">
+        <div class="eyebrow reveal" style="--d:.05s"><span class="dot"></span>Impacto econômico consolidado</div>
+        <h2 class="reveal" style="--d:.16s">O que estes investimentos<br><b>constroem para o Maranhão</b></h2>
+      </div>
+
+      <div class="im-body">
+        <p class="reveal" style="--d:.32s">A formalização destes quatro projetos impulsiona o <b>PIB estadual</b>, expande as <b>exportações</b> e consolida um novo polo industrial de energias limpas em Bacabeira.</p>
+        <div class="im-chips reveal" style="--d:.46s">
+          <span class="c"><b>+</b> PIB estadual</span>
+          <span class="c"><b>+</b> Exportações</span>
+          <span class="c"><b>+</b> Emprego & renda</span>
+          <span class="c"><b>+</b> Capacitação local</span>
+          <span class="c"><b>+</b> Arrecadação</span>
+          <span class="c"><b>+</b> Diversificação industrial</span>
+          <span class="c"><b>+</b> Infraestrutura & logística</span>
+          <span class="c"><b>+</b> Energias limpas</span>
+        </div>
+      </div>
+
+      <div class="im-totals">
+        <div class="im-total hero reveal count" style="--d:.4s">
+          <div class="l">Investimento privado total</div>
+          <div class="n">28,82<u>R$ bi</u></div>
+        </div>
+        <div class="im-total reveal count" style="--d:.52s">
+          <div class="l">Empregos previstos</div>
+          <div class="n">29.893</div>
+        </div>
+        <div class="im-total reveal count" style="--d:.64s">
+          <div class="l">Área destinada</div>
+          <div class="n">804<u>ha</u></div>
+        </div>
+      </div>
+
+      <div class="footer-dark reveal" style="--d:.8s">
+        <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
+        <span class="pg">07 / 07</span>
+      </div>
+    </section>
+
+  </div><!-- /deck-stage -->
+</div><!-- /deck-viewport -->
+
+<!-- === CHROME DE NAVEGAÇÃO === -->
+<div class="deck-controls">
+  <button id="prev" aria-label="Slide anterior">‹</button>
+  <span class="counter" id="counter">01 / 07</span>
+  <button id="next" aria-label="Próximo slide">›</button>
+  <span class="divider"></span>
+  <button id="fs" class="fs-btn" aria-label="Tela cheia" title="Tela cheia (F)">
+    <!-- ícone entrar em tela cheia -->
+    <svg class="ic-enter" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    <!-- ícone sair de tela cheia (oculto por padrão) -->
+    <svg class="ic-exit" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+  </button>
+</div>
+<div class="nav-hint">← → · Espaço · Toque · F tela cheia</div>
+
+<script>
+/* ==========================================================================
+   FIXED-STAGE SCALING — escala o palco 1920×1080 uniformemente na viewport
+   ========================================================================== */
+(function () {
+  const viewport = document.getElementById('viewport');
+  const stage = document.getElementById('stage');
+  const STAGE_W = 1920, STAGE_H = 1080;
+
+  function fit() {
+    const vw = viewport.clientWidth, vh = viewport.clientHeight;
+    const scale = Math.min(vw / STAGE_W, vh / STAGE_H);
+    const x = (vw - STAGE_W * scale) / 2;
+    const y = (vh - STAGE_H * scale) / 2;
+    stage.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+  fit();
+
+  /* ========================================================================
+     NAVEGAÇÃO ENTRE SLIDES
+     ======================================================================== */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let idx = 0;
+
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const pad = n => String(n).padStart(2, '0');
+
+  function show(n) {
+    idx = Math.max(0, Math.min(total - 1, n));
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    counter.textContent = `${pad(idx + 1)} / ${pad(total)}`;
+    progress.style.width = `${((idx + 1) / total) * 100}%`;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFullscreen(); }
+  });
+
+  /* ========================================================================
+     TELA CHEIA (fullscreen) — botão + tecla F, com fallback cross-browser
+     ======================================================================== */
+  const fsBtn = document.getElementById('fs');
+  const icEnter = fsBtn.querySelector('.ic-enter');
+  const icExit = fsBtn.querySelector('.ic-exit');
+  const fsEl = document.documentElement;
+
+  function isFs() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+  }
+  function toggleFullscreen() {
+    if (!isFs()) {
+      const req = fsEl.requestFullscreen || fsEl.webkitRequestFullscreen || fsEl.msRequestFullscreen;
+      if (req) req.call(fsEl);
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exit) exit.call(document);
+    }
+  }
+  function syncFsIcon() {
+    const on = !!isFs();
+    icEnter.style.display = on ? 'none' : '';
+    icExit.style.display = on ? '' : 'none';
+    fsBtn.title = on ? 'Sair da tela cheia (F)' : 'Tela cheia (F)';
+  }
+  fsBtn.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', syncFsIcon);
+  document.addEventListener('webkitfullscreenchange', syncFsIcon);
+  document.addEventListener('msfullscreenchange', syncFsIcon);
+
+  /* swipe em touch */
+  let touchX = null;
+  viewport.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  viewport.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 60) { dx < 0 ? next() : prev(); }
+    touchX = null;
+  }, { passive: true });
+
+  /* clique na metade direita/esquerda do palco avança/retrocede */
+  viewport.addEventListener('click', e => {
+    if (e.target.closest('.deck-controls')) return;
+    (e.clientX > window.innerWidth / 2) ? next() : prev();
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

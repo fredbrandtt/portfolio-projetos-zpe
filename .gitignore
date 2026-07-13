@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Word lock / temp files
+~$*.docx
+
+# Editor
+.vscode/
+.idea/
+
+# Node (caso alguém rode ferramentas locais)
+node_modules/
