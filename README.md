@@ -1,4 +1,4 @@
-# Portfólio de Projetos Industriais — ZPE Maranhão
+# Projetos Industriais — ZPE Maranhão
 
 Apresentação institucional (deck HTML 16:9) para o **Ato de Formalização dos Investimentos na ZPE Maranhão**, construída sobre o *ZPE Maranhão Design System*.
 
@@ -22,7 +22,7 @@ O deck traz **uma lauda por projeto**, cada uma com: sobre o projeto, investimen
 
 Projetos: **Hydeas** (ferro-esponja verde / HBI) · **Oil Group** (refinaria modular + SAF) · **4Wood Biotech** (etanol 2G) · **H2X** (e-metanol e hidrogênio verde).
 
-Portfólio consolidado: **R$ 28,82 bi** em capital privado · **29.893** empregos previstos · **804 ha** de área industrial.
+Visão consolidada: **R$ 28,82 bi** em investimento privado · **29.893** empregos previstos · **804 ha** de área industrial.
 
 ## Estrutura do repositório
 

@@ -1,6 +1,6 @@
 <!-- ==========================================================================
      ZPE MARANHÃO · Ato de Formalização dos Investimentos
-     Deck institucional 16:9 · Portfólio de Projetos Industriais
+     Deck institucional 16:9 · Projetos Industriais
      Design System ZPE Maranhão v1.0 (Barlow / Inter / JetBrains Mono ·
      azul institucional dominante · verde acento cirúrgico · gradients de
      profundidade + grão · seta e world dotted como motivos de marca).
@@ -151,6 +151,10 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 .pill.dark { color: var(--green-soft); background: rgba(76,172,75,.12); border: 1px solid rgba(76,172,75,.32); }
 .pill.dark .led { background: var(--green-soft); box-shadow: 0 0 0 4px rgba(76,172,75,.16); }
 
+/* Prefixo de moeda em números grandes: "R$" antes do valor, tamanho médio.
+   Unidade (bi/mi) permanece como sufixo pequeno via <u>. */
+.n .cur { font-size: .5em; font-weight: 500; color: var(--green-soft); margin-right: .14em; letter-spacing: 0; vertical-align: baseline; }
+
 /* ==========================================================================
    6. CAPA
    ========================================================================== */
@@ -191,7 +195,7 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 .footer-light .pg { font-family: var(--font-mono); font-size: 18px; letter-spacing: .1em; color: var(--ink-mute); }
 
 /* ==========================================================================
-   7. SLIDE DE VISÃO GERAL (portfólio consolidado)
+   7. SLIDE DE VISÃO GERAL (visão consolidada)
    ========================================================================== */
 .s-overview { background: var(--grad-aurora-blue); color: #fff; font-family: var(--font-body); }
 .s-overview .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 60% at 15% 12%, rgba(74,120,200,.42) 0%, transparent 60%); z-index: 1; }
@@ -294,10 +298,10 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 .im-head .eyebrow { color: var(--green-soft); }
 .im-head h2 { font-family: var(--font-display); font-weight: 300; font-size: 72px; line-height: 1.03; letter-spacing: -.025em; margin: 26px 0 0; }
 .im-head h2 b { font-weight: 600; }
-.im-body { position: absolute; z-index: 3; left: 128px; top: 348px; right: 700px; }
-.im-body p { font-size: 27px; line-height: 1.6; color: rgba(255,255,255,.78); }
+.im-body { position: absolute; z-index: 3; left: 128px; top: 336px; right: 700px; }
+.im-body p { font-size: 26px; line-height: 1.58; color: rgba(255,255,255,.78); }
 .im-body p b { color: #fff; font-weight: 600; }
-.im-chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; max-width: 46ch; }
+.im-chips { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 30px; max-width: 46ch; }
 .im-chips .c { font-family: var(--font-mono); font-size: 18px; letter-spacing: .03em; padding: 12px 20px; border-radius: 9999px; border: 1px solid rgba(255,255,255,.16); color: rgba(255,255,255,.86); }
 .im-chips .c b { color: var(--green-soft); font-weight: 600; }
 .im-totals { position: absolute; z-index: 3; right: 128px; top: 300px; width: 508px; display: flex; flex-direction: column; gap: 20px; }
@@ -359,6 +363,23 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 
 /* dica de navegação */
 .nav-hint { position: fixed; bottom: 30px; right: 30px; z-index: 1000; font-family: var(--font-mono); font-size: 15px; letter-spacing: .05em; color: rgba(255,255,255,.5); text-transform: uppercase; }
+
+/* ==========================================================================
+   13. IMPRESSÃO / PDF — mostra TODOS os slides no estado final (um por página)
+   O viewport-base já torna cada .slide visível; aqui neutralizamos os estados
+   iniciais das animações (reveal/grow/transform) para nada sair invisível.
+   ========================================================================== */
+@media print {
+  .progress, .nav-hint { display: none !important; }
+  .slide { transform: none !important; }
+  /* estados finais das animações de entrada */
+  .reveal, .slide .reveal,
+  .count, .slide .count { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .grow, .slide .grow { transform: scaleX(1) !important; animation: none !important; }
+  .bar-fill { animation: none !important; }
+  /* cores de fundo dos gradientes precisam imprimir */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
 </style>
 </head>
 <body>
@@ -378,7 +399,7 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 
       <div class="cover-inner">
         <div class="kicker reveal" style="--d:.1s"><span class="rule"></span>Ato de Formalização dos Investimentos</div>
-        <h1 class="reveal" style="--d:.24s">Portfólio de projetos<br><b>industriais</b> da <span class="em">ZPE Maranhão</span></h1>
+        <h1 class="reveal" style="--d:.24s">Projetos<br><b>industriais</b> da <span class="em">ZPE Maranhão</span></h1>
         <p class="lede reveal" style="--d:.5s">Quatro empreendimentos âncora que transformam Bacabeira em polo industrial de exportação: energia limpa, siderurgia verde e biocombustíveis.</p>
       </div>
 
@@ -396,15 +417,15 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
       <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
 
       <div class="ov-head">
-        <div class="eyebrow reveal" style="--d:.05s"><span class="dot"></span>Portfólio consolidado</div>
-        <h2 class="reveal" style="--d:.16s">Um portfólio de <b>R$ 28,82 bilhões</b> em capital privado</h2>
+        <div class="eyebrow reveal" style="--d:.05s"><span class="dot"></span>Visão consolidada</div>
+        <h2 class="reveal" style="--d:.16s"><b>R$ 28,82 bilhões</b> em investimento privado</h2>
       </div>
 
       <div class="ov-grid">
         <div class="ov-stat reveal" style="--d:.34s"><span class="topline grow" style="--d:.5s"></span>
           <div class="l">Investimento total</div>
-          <div class="n count" style="--d:.5s">28,82<u>R$ bi</u></div>
-          <div class="sub">CAPEX privado somado dos quatro projetos</div>
+          <div class="n count" style="--d:.5s"><span class="cur">R$</span>28,82<u>bi</u></div>
+          <div class="sub">Investimento privado somado dos quatro projetos</div>
         </div>
         <div class="ov-stat reveal" style="--d:.46s"><span class="topline grow" style="--d:.6s"></span>
           <div class="l">Empregos previstos</div>
@@ -467,8 +488,8 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
         <div class="pj-metrics">
           <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
             <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s">18,46<u>R$ bi</u></div>
-            <div class="foot">Maior CAPEX do portfólio</div>
+            <div class="n count" style="--d:.4s"><span class="cur">R$</span>18,46<u>bi</u></div>
+            <div class="foot">Maior investimento entre os projetos</div>
           </div>
           <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
             <div class="l">Área destinada</div>
@@ -545,8 +566,8 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
         <div class="pj-metrics">
           <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
             <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s">5,89<u>R$ bi</u></div>
-            <div class="foot">≈ US$ 1,14 bilhão</div>
+            <div class="n count" style="--d:.4s"><span class="cur">R$</span>5,89<u>bi</u></div>
+            <div class="foot">Refinaria modular com foco em SAF</div>
           </div>
           <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
             <div class="l">Área destinada</div>
@@ -622,8 +643,8 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
         <div class="pj-metrics">
           <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
             <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s">2,43<u>R$ bi</u></div>
-            <div class="foot">≈ US$ 470 milhões</div>
+            <div class="n count" style="--d:.4s"><span class="cur">R$</span>2,43<u>bi</u></div>
+            <div class="foot">Biorrefinaria de etanol 2G</div>
           </div>
           <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
             <div class="l">Área destinada</div>
@@ -697,8 +718,8 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
         <div class="pj-metrics">
           <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
             <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s">2,04<u>R$ bi</u></div>
-            <div class="foot">R$ 2,036 bilhões</div>
+            <div class="n count" style="--d:.4s"><span class="cur">R$</span>2,04<u>bi</u></div>
+            <div class="foot">Valor exato: R$ 2,036 bilhões</div>
           </div>
           <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
             <div class="l">Área destinada</div>
@@ -760,10 +781,12 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
         <div class="im-chips reveal" style="--d:.46s">
           <span class="c"><b>+</b> PIB estadual</span>
           <span class="c"><b>+</b> Exportações</span>
+          <span class="c"><b>+</b> Balança comercial do Maranhão</span>
           <span class="c"><b>+</b> Emprego & renda</span>
           <span class="c"><b>+</b> Capacitação local</span>
           <span class="c"><b>+</b> Arrecadação</span>
           <span class="c"><b>+</b> Diversificação industrial</span>
+          <span class="c"><b>+</b> Difusão tecnológica</span>
           <span class="c"><b>+</b> Infraestrutura & logística</span>
           <span class="c"><b>+</b> Energias limpas</span>
         </div>
@@ -772,7 +795,7 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
       <div class="im-totals">
         <div class="im-total hero reveal count" style="--d:.4s">
           <div class="l">Investimento privado total</div>
-          <div class="n">28,82<u>R$ bi</u></div>
+          <div class="n"><span class="cur">R$</span>28,82<u>bi</u></div>
         </div>
         <div class="im-total reveal count" style="--d:.52s">
           <div class="l">Empregos previstos</div>
@@ -805,8 +828,12 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
     <!-- ícone sair de tela cheia (oculto por padrão) -->
     <svg class="ic-exit" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
   </button>
+  <button id="pdf" class="fs-btn" aria-label="Imprimir ou salvar em PDF" title="Imprimir / salvar em PDF (P)">
+    <!-- ícone de impressora -->
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2M6 14h12v7H6z"/></svg>
+  </button>
 </div>
-<div class="nav-hint">← → · Espaço · Toque · F tela cheia</div>
+<div class="nav-hint">← → · Espaço · Toque · F tela cheia · P imprimir</div>
 
 <script>
 /* ==========================================================================
@@ -857,7 +884,16 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
     else if (e.key === 'Home') { show(0); }
     else if (e.key === 'End') { show(total - 1); }
     else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFullscreen(); }
+    else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); printDeck(); }
   });
+
+  /* ========================================================================
+     IMPRIMIR / SALVAR EM PDF — abre o diálogo de impressão do navegador.
+     O CSS @media print renderiza os 7 slides, um por página, em 1920×1080.
+     No diálogo, o usuário escolhe "Salvar como PDF" e, em Layout, "Paisagem".
+     ======================================================================== */
+  function printDeck() { window.print(); }
+  document.getElementById('pdf').addEventListener('click', printDeck);
 
   /* ========================================================================
      TELA CHEIA (fullscreen) — botão + tecla F, com fallback cross-browser
