@@ -4,7 +4,9 @@ Apresentação institucional (deck HTML 16:9) para o **Ato de Formalização dos
 
 ## Como abrir
 
-Abra [`apresentacao/index.html`](apresentacao/index.html) em qualquer navegador moderno. É um arquivo único e autocontido (CSS/JS inline); os assets de marca ficam em `apresentacao/assets/brand/`.
+Abra [`index.html`](index.html) em qualquer navegador moderno. É um arquivo único e autocontido (CSS/JS inline); os assets de marca ficam em `assets/brand/`.
+
+Publicado via **GitHub Pages**: https://fredbrandtt.github.io/portfolio-projetos-zpe/
 
 ### Navegação
 
@@ -25,7 +27,8 @@ Portfólio consolidado: **R$ 28,82 bi** em capital privado · **29.893** emprego
 ## Estrutura do repositório
 
 ```
-apresentacao/                       Deck final (index.html + assets/brand/)
+index.html                          Deck final (autocontido)
+assets/brand/                       Assets de marca (seta, logos, mapa)
 ZPE Maranhão Design System/         Sistema de design da marca (referência)
 RESUMO DOS PROJETOS ...docx         Fonte de dados original
 ```
