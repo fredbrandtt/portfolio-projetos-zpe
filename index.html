@@ -221,6 +221,77 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 .ov-companies .chip b { color: var(--green-soft); font-weight: 600; }
 
 /* ==========================================================================
+   7b. MARCOS ESTRUTURANTES — linha do tempo de fases (6 colunas)
+   Fundo azul escuro. Cada fase é uma coluna: nº grande + título (destaque)
+   + lista curta de marcos. A 6ª fase = marco de consolidação (hoje), tratada
+   como acento verde. A "spine" horizontal encoda a progressão (não decora).
+   ========================================================================== */
+.s-marcos { background: var(--grad-aurora-blue); color: #fff; font-family: var(--font-body); }
+.s-marcos .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 60% at 20% 8%, rgba(74,120,200,.4) 0%, transparent 60%); z-index: 1; }
+.s-marcos .world-dotted { opacity: .06; }
+
+.mk-head { position: absolute; z-index: 3; left: 128px; top: 96px; right: 128px; }
+.mk-head .eyebrow { color: var(--green-soft); }
+.mk-head h2 { font-family: var(--font-display); font-weight: 300; font-size: 62px; line-height: 1.02; letter-spacing: -.025em; margin: 20px 0 0; }
+.mk-head h2 b { font-weight: 600; }
+
+/* trilho da linha do tempo */
+.mk-timeline { position: absolute; z-index: 3; left: 128px; right: 128px; top: 322px; }
+.mk-spine { position: relative; height: 3px; background: rgba(255,255,255,.14); border-radius: 3px; margin: 0 0 0; }
+.mk-spine .fill { position: absolute; inset: 0; width: 100%; background: var(--grad-accent-line); border-radius: 3px; transform-origin: left center; }
+.mk-nodes { display: grid; grid-template-columns: repeat(6, 1fr); }
+.mk-node { position: relative; }
+.mk-node .dot { position: absolute; top: -8px; left: 0; width: 15px; height: 15px; border-radius: 50%; background: var(--blue-deep); border: 3px solid rgba(255,255,255,.35); z-index: 2; }
+.mk-node.now .dot { background: var(--green); border-color: rgba(76,172,75,.45); box-shadow: 0 0 0 6px rgba(76,172,75,.18); }
+
+/* colunas de fase */
+.mk-cols { position: absolute; z-index: 3; left: 128px; right: 128px; top: 372px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; }
+.mk-col { position: relative; padding-right: 18px; }
+.mk-col + .mk-col::before { content: ""; position: absolute; left: -12px; top: 6px; bottom: 30px; width: 1px; background: rgba(255,255,255,.09); }
+.mk-phase { display: flex; align-items: baseline; gap: 12px; }
+.mk-phase .num { font-family: var(--font-display); font-weight: 300; font-size: 46px; line-height: 1; letter-spacing: -.02em; color: rgba(255,255,255,.32); font-variant-numeric: tabular-nums; }
+.mk-col.now .mk-phase .num { color: var(--green-soft); }
+.mk-phase .ttl { font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1.12; letter-spacing: -.01em; color: #fff; }
+.mk-col.now .mk-phase .ttl { color: var(--green-soft); }
+.mk-list { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.mk-list li { position: relative; font-size: 18.5px; line-height: 1.32; color: rgba(255,255,255,.8); padding-left: 20px; }
+.mk-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 7px; height: 7px; border-radius: 2px; background: var(--green); opacity: .85; }
+.mk-col.now .mk-list li::before { background: var(--green-soft); }
+.mk-list li b { color: #fff; font-weight: 600; }
+.mk-list li .fine { display: block; font-size: 15.5px; color: rgba(255,255,255,.5); margin-top: 3px; line-height: 1.3; }
+
+/* selo "hoje" na fase de consolidação */
+.mk-now-badge {
+  display: inline-flex; align-items: center; gap: 9px; margin-bottom: 16px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 15px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--green-soft); background: rgba(76,172,75,.14); border: 1px solid rgba(76,172,75,.34);
+  padding: 7px 14px; border-radius: 9999px;
+}
+.mk-now-badge .led { width: 7px; height: 7px; border-radius: 50%; background: var(--green-soft); box-shadow: 0 0 0 4px rgba(76,172,75,.18); }
+
+/* ==========================================================================
+   7c. ENCERRAMENTO / AGRADECIMENTO — logo ZPE em destaque, fundo escuro
+   ========================================================================== */
+.s-close { background: var(--grad-aurora-deep); color: #fff; font-family: var(--font-body); display: grid; place-items: center; text-align: center; }
+.s-close .aurora { position: absolute; inset: 0; background: radial-gradient(ellipse 58% 55% at 50% 30%, rgba(74,120,200,.42) 0%, transparent 62%); z-index: 1; }
+.s-close .arrow-hero { right: -140px; bottom: -160px; width: 640px; opacity: .1; }
+.s-close .world-dotted { opacity: .09; }
+.cl-inner { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; padding: 0 120px; }
+.cl-inner .kicker {
+  font-family: var(--font-mono); font-weight: 500; font-size: 21px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--green-soft);
+  display: inline-flex; align-items: center; gap: 16px;
+}
+.cl-inner .kicker .rule { width: 46px; height: 2px; background: var(--green-soft); opacity: .8; }
+.cl-inner h2 { font-family: var(--font-display); font-weight: 300; font-size: 96px; line-height: 1; letter-spacing: -.03em; margin: 36px 0 0; }
+.cl-inner h2 b { font-weight: 600; }
+.cl-inner .sub { font-size: 27px; color: rgba(255,255,255,.7); max-width: 40ch; margin-top: 30px; line-height: 1.5; }
+.cl-logo { margin-top: 68px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.cl-logo .accent-bar { background: var(--grad-accent-line); }
+.cl-logo img { height: 92px; }
+.cl-meta { position: absolute; z-index: 3; bottom: 64px; left: 0; right: 0; text-align: center; font-family: var(--font-mono); font-size: 17px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.42); }
+
+/* ==========================================================================
    8. LAUDA DO PROJETO — layout mestre (uma por projeto)
    ========================================================================== */
 .s-project { background: var(--canvas); color: var(--ink); font-family: var(--font-body); display: grid; grid-template-columns: 760px 1fr; }
@@ -405,12 +476,102 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 
       <div class="footer-dark reveal" style="--d:.8s">
         <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
-        <span class="pg">01 / 07</span>
+        <span class="pg">01 / 05</span>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 2 · VISÃO GERAL DO PORTFÓLIO
+         SLIDE 2 · MARCOS ESTRUTURANTES — linha do tempo de 6 fases
+         ==================================================================== -->
+    <section class="slide s-marcos grain-dark" data-theme="dark">
+      <div class="aurora"></div>
+      <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
+
+      <div class="mk-head">
+        <div class="eyebrow reveal" style="--d:.05s"><span class="dot"></span>Trajetória institucional</div>
+        <h2 class="reveal" style="--d:.16s">Marcos estruturantes da <b>ZPE Maranhão</b></h2>
+      </div>
+
+      <!-- spine + nós da linha do tempo -->
+      <div class="mk-timeline reveal" style="--d:.28s">
+        <div class="mk-spine"><span class="fill grow" style="--d:.5s"></span></div>
+        <div class="mk-nodes">
+          <div class="mk-node"><span class="dot"></span></div>
+          <div class="mk-node"><span class="dot"></span></div>
+          <div class="mk-node"><span class="dot"></span></div>
+          <div class="mk-node"><span class="dot"></span></div>
+          <div class="mk-node"><span class="dot"></span></div>
+          <div class="mk-node now"><span class="dot"></span></div>
+        </div>
+      </div>
+
+      <!-- colunas de fase -->
+      <div class="mk-cols">
+        <div class="mk-col reveal" style="--d:.34s">
+          <div class="mk-phase"><span class="num">01</span><span class="ttl">Fundação institucional</span></div>
+          <ul class="mk-list">
+            <li>Criação da ZPE</li>
+            <li>Contratação da equipe técnica</li>
+            <li>Governança no modelo <b>S.A.</b><span class="fine">Consultoria de fluxos internos e reestruturação dos documentos de governança</span></li>
+          </ul>
+        </div>
+
+        <div class="mk-col reveal" style="--d:.42s">
+          <div class="mk-phase"><span class="num">02</span><span class="ttl">Licenciamento & regularização</span></div>
+          <ul class="mk-list">
+            <li>Zoneamento</li>
+            <li>Anuência do <b>IPHAN</b></li>
+            <li>Licença Ambiental Prévia e de Instalação</li>
+            <li>Elaboração do TR de Alfandegamento</li>
+          </ul>
+        </div>
+
+        <div class="mk-col reveal" style="--d:.5s">
+          <div class="mk-phase"><span class="num">03</span><span class="ttl">Engenharia & infraestrutura</span></div>
+          <ul class="mk-list">
+            <li>Projetos de engenharia<span class="fine">Arquitetônico e complementar</span></li>
+            <li>Estudo de ancoragem do cabo submarino</li>
+            <li>Estudo da rota de container</li>
+          </ul>
+        </div>
+
+        <div class="mk-col reveal" style="--d:.58s">
+          <div class="mk-phase"><span class="num">04</span><span class="ttl">Inteligência de mercado</span></div>
+          <ul class="mk-list">
+            <li>Benchmarking ZPEs nacionais<span class="fine">Parnaíba, Pecém, Santos, Barcarena, SUAPE e portos-secos</span></li>
+            <li>Benchmarking internacional<span class="fine">Panamá, Hamburgo e China</span></li>
+            <li>Estudo de precificação e tabela de serviços</li>
+            <li>Fluxo de análise de projetos</li>
+            <li>Manual técnico do empreendedor</li>
+          </ul>
+        </div>
+
+        <div class="mk-col reveal" style="--d:.66s">
+          <div class="mk-phase"><span class="num">05</span><span class="ttl">Articulação & logística</span></div>
+          <ul class="mk-list">
+            <li>TC com portos privados<span class="fine">Amplitude de rotas logísticas de escoamento</span></li>
+            <li>Celebração de TC com <b>ALADA</b> e <b>GASMAR</b></li>
+          </ul>
+        </div>
+
+        <div class="mk-col now reveal" style="--d:.74s">
+          <span class="mk-now-badge"><span class="led"></span>Hoje</span>
+          <div class="mk-phase"><span class="num">06</span><span class="ttl">Consolidação</span></div>
+          <ul class="mk-list">
+            <li>Divulgação do <b>cronograma de obras</b></li>
+            <li>Assinatura de contratos de reserva com <b>âncoras</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-dark reveal" style="--d:.9s">
+        <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
+        <span class="pg">02 / 05</span>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 3 · VISÃO CONSOLIDADA GLOBAL
          ==================================================================== -->
     <section class="slide s-overview grain-dark" data-theme="dark">
       <div class="aurora"></div>
@@ -454,317 +615,12 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 
       <div class="footer-dark reveal" style="--d:1s">
         <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
-        <span class="pg">02 / 07</span>
+        <span class="pg">03 / 05</span>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 3 · LAUDA — PROJETO 01 · HYDEAS
-         ==================================================================== -->
-    <section class="slide s-project" data-theme="light">
-      <!-- painel esquerdo (âncora azul) -->
-      <div class="pj-left grain-dark" style="--slide-bg:transparent">
-        <div class="aurora" style="background:var(--grad-aurora-deep)"></div>
-        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
-        <div class="inner">
-          <div class="pj-index reveal" style="--d:.05s"><span class="big">01</span> / 04 · Siderurgia verde</div>
-          <div class="pj-company reveal" style="--d:.16s">Hydeas</div>
-          <div class="pj-tagline reveal" style="--d:.26s">Complexo integrado de <b>ferro-esponja verde</b> (HBI)</div>
-          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
-          <p class="pj-about reveal" style="--d:.44s">Complexo industrial integrado para produção de ferro-esponja briquetado a quente (HBI, Hot Briquetted Iron), insumo estratégico para a siderurgia de baixo carbono voltado à exportação.</p>
-          <div class="pj-products reveal" style="--d:.56s">
-            <div class="l">Produtos & serviços</div>
-            <div class="tags"><span class="tag">HBI · Ferro-esponja briquetado a quente</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- painel direito (dados-chave) -->
-      <div class="pj-right">
-        <div class="rtop">
-          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
-        </div>
-
-        <div class="pj-metrics">
-          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
-            <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s"><span class="cur">R$</span>18,46<u>bi</u></div>
-            <div class="foot">Maior investimento entre os projetos</div>
-          </div>
-          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
-            <div class="l">Área destinada</div>
-            <div class="n count" style="--d:.5s">460<u>ha</u></div>
-            <div class="foot">4.600.000 m²</div>
-          </div>
-        </div>
-
-        <div class="pj-jobs reveal" style="--d:.4s">
-          <div class="jhead">
-            <div class="l">Empregos gerados · implantação</div>
-            <div class="total">18.233 <u>total</u></div>
-          </div>
-          <div class="bar-track">
-            <div class="seg-d bar-fill" style="width:40%"></div>
-            <div class="seg-i bar-fill" style="width:60%"></div>
-          </div>
-          <div class="legend">
-            <div class="li"><span class="sw d"></span>Diretos <b>7.284</b></div>
-            <div class="li"><span class="sw i"></span>Indiretos <b>10.949</b></div>
-          </div>
-          <div class="jnote">Na operação: 4.710 empregos (300 diretos · 4.410 indiretos).</div>
-        </div>
-
-        <div class="pj-strip">
-          <div class="pj-box phase reveal" style="--d:.5s">
-            <div class="l"><span class="rule"></span>Prazo & situação</div>
-            <div class="phv">Fase de implantação</div>
-            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
-          </div>
-          <div class="pj-box impact reveal" style="--d:.58s">
-            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
-            <div class="iv">Ancoragem de uma <b>cadeia siderúrgica de baixo carbono</b> voltada à exportação, adensando fornecedores e agregando valor ao minério regional.</div>
-          </div>
-        </div>
-
-        <div class="footer-light reveal" style="--d:.7s">
-          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
-          <span class="pg">03 / 07</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 4 · LAUDA — PROJETO 02 · OIL GROUP
-         ==================================================================== -->
-    <section class="slide s-project" data-theme="light">
-      <div class="pj-left grain-dark" style="--slide-bg:transparent">
-        <div class="aurora" style="background:var(--grad-aurora-blue)"></div>
-        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
-        <div class="inner">
-          <div class="pj-index reveal" style="--d:.05s"><span class="big">02</span> / 04 · Refino & combustíveis</div>
-          <div class="pj-company reveal" style="--d:.16s">Oil Group</div>
-          <div class="pj-tagline reveal" style="--d:.26s">Refinaria modular de derivados de petróleo e <b>SAF</b></div>
-          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
-          <p class="pj-about reveal" style="--d:.44s">Refinaria modular voltada à produção de combustível de aviação sustentável (SAF) e derivados de petróleo para os mercados marítimo e rodoviário, com foco em exportação.</p>
-          <div class="pj-products reveal" style="--d:.56s">
-            <div class="l">Produtos & serviços</div>
-            <div class="tags">
-              <span class="tag">QAV Renovável (SAF)</span>
-              <span class="tag">Diesel comum</span>
-              <span class="tag">Diesel marítimo (MGO)</span>
-              <span class="tag">Gasolina</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pj-right">
-        <div class="rtop">
-          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
-        </div>
-
-        <div class="pj-metrics">
-          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
-            <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s"><span class="cur">R$</span>5,89<u>bi</u></div>
-            <div class="foot">Refinaria modular com foco em SAF</div>
-          </div>
-          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
-            <div class="l">Área destinada</div>
-            <div class="n count" style="--d:.5s">264<u>ha</u></div>
-            <div class="foot">2.640.000 m²</div>
-          </div>
-        </div>
-
-        <div class="pj-jobs reveal" style="--d:.4s">
-          <div class="jhead">
-            <div class="l">Empregos gerados · implantação</div>
-            <div class="total">2.000 <u>diretos</u></div>
-          </div>
-          <div class="bar-track">
-            <div class="seg-d bar-fill" style="width:100%"></div>
-          </div>
-          <div class="legend">
-            <div class="li"><span class="sw d"></span>Diretos <b>2.000</b></div>
-            <div class="li"><span class="sw i"></span>Indiretos <b>a informar</b></div>
-          </div>
-          <div class="jnote">Na operação: 300 empregos diretos.</div>
-        </div>
-
-        <div class="pj-strip">
-          <div class="pj-box phase reveal" style="--d:.5s">
-            <div class="l"><span class="rule"></span>Prazo & situação</div>
-            <div class="phv">Pronto para implantação</div>
-            <span class="pill approved"><span class="led"></span>Aprovado & autorizado · CZPE</span>
-          </div>
-          <div class="pj-box impact reveal" style="--d:.58s">
-            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
-            <div class="iv">Coloca o Estado na rota do <b>combustível de aviação sustentável</b>, com exportação de derivados e fortalecimento da matriz de energias limpas.</div>
-          </div>
-        </div>
-
-        <div class="footer-light reveal" style="--d:.7s">
-          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
-          <span class="pg">04 / 07</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 5 · LAUDA — PROJETO 03 · 4WOOD BIOTECH
-         ==================================================================== -->
-    <section class="slide s-project" data-theme="light">
-      <div class="pj-left grain-dark" style="--slide-bg:transparent">
-        <div class="aurora" style="background:var(--grad-aurora-deep)"></div>
-        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
-        <div class="inner">
-          <div class="pj-index reveal" style="--d:.05s"><span class="big">03</span> / 04 · Bioeconomia</div>
-          <div class="pj-company reveal" style="--d:.16s">4Wood<br>Biotech</div>
-          <div class="pj-tagline reveal" style="--d:.26s">Biorrefinaria de <b>etanol de 2ª geração</b></div>
-          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
-          <p class="pj-about reveal" style="--d:.44s">Biorrefinaria de etanol de segunda geração (E2G) que converte biomassa em combustível renovável e coprodutos químicos de alto valor para o mercado global.</p>
-          <div class="pj-products reveal" style="--d:.56s">
-            <div class="l">Produtos & serviços</div>
-            <div class="tags">
-              <span class="tag">Etanol (E2G)</span>
-              <span class="tag">Furfural</span>
-              <span class="tag">Ácido acético</span>
-              <span class="tag">Lignina de alta pureza</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pj-right">
-        <div class="rtop">
-          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
-        </div>
-
-        <div class="pj-metrics">
-          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
-            <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s"><span class="cur">R$</span>2,43<u>bi</u></div>
-            <div class="foot">Biorrefinaria de etanol 2G</div>
-          </div>
-          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
-            <div class="l">Área destinada</div>
-            <div class="n count" style="--d:.5s">20<u>ha</u></div>
-            <div class="foot">200.000 m²</div>
-          </div>
-        </div>
-
-        <div class="pj-jobs reveal" style="--d:.4s">
-          <div class="jhead">
-            <div class="l">Empregos gerados · implantação</div>
-            <div class="total">2.000 <u>diretos</u></div>
-          </div>
-          <div class="bar-track">
-            <div class="seg-d bar-fill" style="width:100%"></div>
-          </div>
-          <div class="legend">
-            <div class="li"><span class="sw d"></span>Diretos <b>2.000</b></div>
-            <div class="li"><span class="sw i"></span>Indiretos <b>a informar</b></div>
-          </div>
-          <div class="jnote">Na operação: 150 empregos diretos.</div>
-        </div>
-
-        <div class="pj-strip">
-          <div class="pj-box phase reveal" style="--d:.5s">
-            <div class="l"><span class="rule"></span>Prazo & situação</div>
-            <div class="phv">Fase de implantação</div>
-            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
-          </div>
-          <div class="pj-box impact reveal" style="--d:.58s">
-            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
-            <div class="iv">Diversifica a indústria com <b>bioeconomia de alto valor</b>: etanol avançado e química verde a partir de biomassa, agregando valor à cadeia local.</div>
-          </div>
-        </div>
-
-        <div class="footer-light reveal" style="--d:.7s">
-          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
-          <span class="pg">05 / 07</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 6 · LAUDA — PROJETO 04 · H2X
-         ==================================================================== -->
-    <section class="slide s-project" data-theme="light">
-      <div class="pj-left grain-dark" style="--slide-bg:transparent">
-        <div class="aurora" style="background:var(--grad-aurora-blue)"></div>
-        <img class="brand-arrow arrow-bg" src="assets/brand/seta_outline.svg" alt="">
-        <div class="inner">
-          <div class="pj-index reveal" style="--d:.05s"><span class="big">04</span> / 04 · Hidrogênio verde</div>
-          <div class="pj-company reveal" style="--d:.16s">H2X</div>
-          <div class="pj-tagline reveal" style="--d:.26s">Planta de <b>e-metanol</b> e <b>hidrogênio verde</b></div>
-          <div class="pj-about-label reveal" style="--d:.36s"><span class="rule"></span>Sobre o projeto</div>
-          <p class="pj-about reveal" style="--d:.44s">Planta de produção de e-metanol e hidrogênio verde (H₂V), combustíveis sintéticos de baixo carbono para descarbonizar a indústria e o transporte marítimo internacional.</p>
-          <div class="pj-products reveal" style="--d:.56s">
-            <div class="l">Produtos & serviços</div>
-            <div class="tags">
-              <span class="tag">E-metanol (álcool metílico)</span>
-              <span class="tag">Hidrogênio verde (H₂V)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pj-right">
-        <div class="rtop">
-          <div class="eyebrow reveal" style="--d:.1s"><span class="dot"></span>Lauda do projeto</div>
-        </div>
-
-        <div class="pj-metrics">
-          <div class="stat-card reveal grain-dark" style="--d:.2s"><span class="topline grow" style="--d:.4s"></span>
-            <div class="l">Investimento previsto</div>
-            <div class="n count" style="--d:.4s"><span class="cur">R$</span>2,04<u>bi</u></div>
-            <div class="foot">Valor exato: R$ 2,036 bilhões</div>
-          </div>
-          <div class="stat-card reveal grain-dark" style="--d:.3s"><span class="topline grow" style="--d:.5s"></span>
-            <div class="l">Área destinada</div>
-            <div class="n count" style="--d:.5s">60<u>ha</u></div>
-            <div class="foot">600.000 m²</div>
-          </div>
-        </div>
-
-        <div class="pj-jobs reveal" style="--d:.4s">
-          <div class="jhead">
-            <div class="l">Empregos gerados · implantação</div>
-            <div class="total">2.000 <u>total</u></div>
-          </div>
-          <div class="bar-track">
-            <div class="seg-d bar-fill" style="width:25%"></div>
-            <div class="seg-i bar-fill" style="width:75%"></div>
-          </div>
-          <div class="legend">
-            <div class="li"><span class="sw d"></span>Diretos <b>500</b></div>
-            <div class="li"><span class="sw i"></span>Indiretos <b>1.500</b></div>
-          </div>
-          <div class="jnote">Na operação: 500 empregos (100 diretos · 400 indiretos).</div>
-        </div>
-
-        <div class="pj-strip">
-          <div class="pj-box phase reveal" style="--d:.5s">
-            <div class="l"><span class="rule"></span>Prazo & situação</div>
-            <div class="phv">Fase de implantação</div>
-            <span class="pill review"><span class="led"></span>Análise final · CZPE</span>
-          </div>
-          <div class="pj-box impact reveal" style="--d:.58s">
-            <div class="l"><span class="rule"></span>Impacto para o Maranhão</div>
-            <div class="iv">Posiciona o Estado no mercado global de <b>combustíveis sintéticos verdes</b>, atraindo tecnologia de ponta e exportação de energia limpa.</div>
-          </div>
-        </div>
-
-        <div class="footer-light reveal" style="--d:.7s">
-          <img class="logo-img" src="assets/brand/logo_fundo_azul.svg" alt="ZPE Maranhão">
-          <span class="pg">06 / 07</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 7 · IMPACTO CONSOLIDADO / ENCERRAMENTO
+         SLIDE 4 · IMPACTO ECONÔMICO CONSOLIDADO
          ==================================================================== -->
     <section class="slide s-impact grain-dark" data-theme="dark">
       <div class="aurora"></div>
@@ -809,8 +665,30 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 
       <div class="footer-dark reveal" style="--d:.8s">
         <img class="logo-img" src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
-        <span class="pg">07 / 07</span>
+        <span class="pg">04 / 05</span>
       </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 5 · ENCERRAMENTO / AGRADECIMENTO
+         ==================================================================== -->
+    <section class="slide s-close grain-dark" data-theme="dark">
+      <div class="aurora"></div>
+      <img class="world-dotted invert" src="assets/brand/world_dotted.svg" alt="">
+      <img class="brand-arrow arrow-hero drift" src="assets/brand/seta_outline.svg" alt="">
+
+      <div class="cl-inner">
+        <div class="kicker reveal" style="--d:.1s"><span class="rule"></span>ZPE Maranhão · Bacabeira</div>
+        <h2 class="reveal" style="--d:.24s">Obrigado.</h2>
+        <p class="sub reveal" style="--d:.44s">Um novo polo industrial de exportação começa a se consolidar no Maranhão.</p>
+
+        <div class="cl-logo reveal" style="--d:.62s">
+          <span class="accent-bar grow" style="--d:.8s"></span>
+          <img src="assets/brand/logo_fundo_branco.svg" alt="ZPE Maranhão">
+        </div>
+      </div>
+
+      <div class="cl-meta reveal" style="--d:.9s">05 / 05</div>
     </section>
 
   </div><!-- /deck-stage -->
@@ -819,7 +697,7 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
 <!-- === CHROME DE NAVEGAÇÃO === -->
 <div class="deck-controls">
   <button id="prev" aria-label="Slide anterior">‹</button>
-  <span class="counter" id="counter">01 / 07</span>
+  <span class="counter" id="counter">01 / 05</span>
   <button id="next" aria-label="Próximo slide">›</button>
   <span class="divider"></span>
   <button id="fs" class="fs-btn" aria-label="Tela cheia" title="Tela cheia (F)">
